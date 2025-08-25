@@ -54,5 +54,14 @@ public class Calculo {
     @Column(name = "valor_das", nullable = false, precision = 19, scale = 2)
     private BigDecimal valorDas;
 
-
+    public Calculo(Empresa empresa, FaixaAnexo faixaUtilizada, LocalDateTime dataCalculo, LocalDate mesReferencia, BigDecimal rpa, BigDecimal rbt12, BigDecimal aliquotaEfetiva, BigDecimal valorDas) {
+        this.empresa = empresa;
+        this.faixaUtilizada = faixaUtilizada;
+        this.dataCalculo = dataCalculo;
+        this.mesReferencia = mesReferencia;
+        this.rpa = rpa;
+        this.rbt12 = rbt12;
+        this.aliquotaEfetiva = aliquotaEfetiva;
+        this.valorDas = valorDas;
+    }
 }

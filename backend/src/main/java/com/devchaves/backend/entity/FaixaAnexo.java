@@ -25,8 +25,14 @@ public class FaixaAnexo {
     @Column(name = "receita_bruta_min", nullable = false, precision = 19, scale = 2)
     private BigDecimal receitaBrutaMin;
 
+    @Column(name = "receita_bruta_max", nullable = false, precision = 19, scale = 2)
+    private BigDecimal receitaBrutaMax;
+
     @Column(name = "aliquota_nominal", nullable = false, precision = 19, scale = 4)
     private BigDecimal aliquotaNominal;
+
+    @Column(name = "desconto_do_valor_recolhido", nullable = true)
+    private BigDecimal descontoDoValorRecolhido;
 
     @Column(name = "data_inicio_vigencia", nullable = false)
     private LocalDate dataInicioVigencia;
@@ -36,5 +42,6 @@ public class FaixaAnexo {
     private LocalDate dataFimVigencia;
 
 
-
+    public FaixaAnexo(Anexo anexo, BigDecimal receitaBrutaMin, BigDecimal receitaBrutaMax, BigDecimal aliquotaNominal, BigDecimal descontoDoValorRecolhido, LocalDate dataVigencia) {
+    }
 }
