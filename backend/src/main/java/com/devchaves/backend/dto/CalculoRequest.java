@@ -23,6 +23,6 @@ public record CalculoRequest(
         @NotBlank(message = "RBT12 não pode ser vazio")
         String rbt12,
         @NotBlank(message = "Anexo não pode ser vazio")
-        Anexo anexo
+        Long anexo
 ) {
 }
