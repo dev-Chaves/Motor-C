@@ -35,7 +35,7 @@ public class CalculosControllerTest {
 
         CalculoRequest dtoInvalido = new CalculoRequest(
                 "27.252.423/0001-55",
-                "", //
+                "",
                 "350000.00",
                 3L
         );
@@ -47,6 +47,39 @@ public class CalculosControllerTest {
                 .content(jsonRequest))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("RPA não pode ser vazio"));
+    }
+
+    @Test
+    void deveRetornarBadRequestQuandoCPNJNaoForValido() throws Exception{
+        CalculoRequest dtoInvalido = new CalculoRequest(
+                "12312312",
+                "1231231232131", //
+                "350000.00",
+                3L
+        );
+
+        String jsonRequest = objectMapper.writeValueAsString(dtoInvalido);
+
+        mockMvc.perform(post("/calculos/das")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
+                        .andExpect(jsonPath("$.message").value("CNPJ inválido"));
+    }
+
+    @Test
+    void deveRetornarRespostaCorreta() throws Exception{
+        CalculoRequest dto = new CalculoRequest("27.252.423/0001-55"
+                , "50000.00"
+                , "350000.00"
+                , 3L);
+
+        String jsonValido = objectMapper.writeValueAsString(dto);
+
+        mockMvc.perform(post("/calculos/das")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonValido))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.response").value("4262.86"));
     }
 
 }

@@ -1,6 +1,7 @@
 package com.devchaves.backend.controller;
 
 import com.devchaves.backend.dto.CalculoRequest;
+import com.devchaves.backend.dto.CalculoResponse;
 import com.devchaves.backend.service.CalculoService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class CalculosController {
     }
 
     @PostMapping("das")
-    public ResponseEntity<BigDecimal> calculoDASPreReforma(@Valid @RequestBody CalculoRequest dto){
+    public ResponseEntity<CalculoResponse> calculoDASPreReforma(@Valid @RequestBody CalculoRequest dto){
 
         return ResponseEntity.ok().body(calculoService.calculoDasModeloPreReforma(dto));
 
