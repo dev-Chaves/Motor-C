@@ -1,6 +1,7 @@
 package com.devchaves.backend;
 
 import com.devchaves.backend.dto.CalculoRequest;
+import com.devchaves.backend.dto.CalculoResponse;
 import com.devchaves.backend.entity.Anexo;
 import com.devchaves.backend.entity.FaixaAnexo;
 import com.devchaves.backend.exception.RegraDeCalculoNaoEncontradaException;
@@ -54,7 +55,7 @@ public class CalculoServiceTest {
 
         when(empresaRepository.findByCNPJ(dto.cnpj())).thenReturn(Optional.empty());
 
-        BigDecimal DAS = calculoService.calculoDasModeloPreReforma(dto);
+        CalculoResponse DAS = calculoService.calculoDasModeloPreReforma(dto);
 
         // Assert (Verificar)
         // Cálculo manual para o valor esperado:
@@ -65,7 +66,7 @@ public class CalculoServiceTest {
         System.out.println(DAS);
 
         assertNotNull(DAS);
-        assertEquals(0, valorEsperado.compareTo(DAS));
+        assertEquals(0, valorEsperado.compareTo(DAS.response()));
 
     }
 

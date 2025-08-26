@@ -1,5 +1,6 @@
 package com.devchaves.backend.service;
 
+import com.devchaves.backend.dto.CalculoResponse;
 import com.devchaves.backend.exception.RegraDeCalculoNaoEncontradaException;
 import com.devchaves.backend.dto.CalculoRequest;
 import com.devchaves.backend.entity.Anexo;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class CalculoService {
@@ -27,7 +29,7 @@ public class CalculoService {
         this.empresaRepository = empresaRepository;
     }
 
-    public BigDecimal calculoDasModeloPreReforma(CalculoRequest dto){
+    public CalculoResponse calculoDasModeloPreReforma(CalculoRequest dto){
 
         BigDecimal rpa = BigDecimalUtil.toMonetario(dto.rpa());
 
@@ -56,7 +58,7 @@ public class CalculoService {
 
         BigDecimal aliquotaAfetiva = (BigDecimalUtil.dividir(subtracaoEntreOProdutoEParcelaADeduzir, rbt12));
 
-        BigDecimal DAS = BigDecimalUtil.multiplicar(rpa, aliquotaAfetiva);
+        BigDecimal DAS = BigDecimalUtil.toMonetario(BigDecimalUtil.multiplicar(rpa, aliquotaAfetiva));
 
         Calculo calculoFeito = new Calculo(
                 empresa,
@@ -69,7 +71,10 @@ public class CalculoService {
                 DAS
         );
 
-        return BigDecimalUtil.toMonetario(DAS);
+        return new CalculoResponse(
+                DAS,
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        );
     }
 
 }

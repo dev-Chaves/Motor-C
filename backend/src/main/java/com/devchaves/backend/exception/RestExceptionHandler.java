@@ -22,9 +22,16 @@ public class RestExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiErrorResponse> handlerMetodoInvalidoDto(MethodArgumentNotValidException e){
+
+        String mensagem = e.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(error -> error.getDefaultMessage()).findFirst()
+                .orElse("Requisição Inválida");
+
         ApiErrorResponse response = new ApiErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
-                e.getMessage(),
+                mensagem,
                 System.currentTimeMillis()
         );
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
