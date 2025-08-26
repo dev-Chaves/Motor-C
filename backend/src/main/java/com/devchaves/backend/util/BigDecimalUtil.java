@@ -8,8 +8,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @Component
-@NoArgsConstructor
-@AllArgsConstructor
 public class BigDecimalUtil {
 
     /**
@@ -54,7 +52,7 @@ public class BigDecimalUtil {
     // Operações
 
     public static BigDecimal multiplicar(BigDecimal a, BigDecimal b){
-        return a.multiply(b).setScale(SCALE_MONETARIO, ROUNDING_MODE_PADRAO);
+        return a.multiply(b);
     }
 
     public static BigDecimal dividir(BigDecimal dividendo, BigDecimal divisor){
@@ -63,15 +61,15 @@ public class BigDecimalUtil {
             throw new IllegalArgumentException("Divisor não pode ser zero");
         }
 
-        return dividendo.divide(divisor,SCALE_MONETARIO, ROUNDING_MODE_PADRAO);
+        return dividendo.divide(divisor, 10, ROUNDING_MODE_PADRAO);
     }
 
     public static BigDecimal adicao(BigDecimal a, BigDecimal b){
-        return a.add(b).setScale(SCALE_MONETARIO, ROUNDING_MODE_PADRAO);
+        return a.add(b);
     }
 
     public static BigDecimal subtracao(BigDecimal a, BigDecimal b){
-        return a.subtract(b).setScale(SCALE_MONETARIO, ROUNDING_MODE_PADRAO);
+        return a.subtract(b);
     }
 
 

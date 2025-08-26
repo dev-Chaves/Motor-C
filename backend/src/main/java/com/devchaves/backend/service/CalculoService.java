@@ -34,8 +34,11 @@ public class CalculoService {
 
         BigDecimal rbt12 = BigDecimalUtil.toMonetario(dto.rbt12());
 
-        FaixaAnexo faixaAnexo = faixaRepository.faixaIdealDeCalculo(dto.anexo()).orElseThrow(()-> new UsernameNotFoundException("Anexo não encontrado"));
+        if(rpa.compareTo(BigDecimal.ZERO) < 0 || rbt12.compareTo(BigDecimal.ZERO) < 0){
+            throw new IllegalArgumentException("Faturamento não pode ser menor que 0 nem a Receita Bruta do mês");
+        }
 
+        FaixaAnexo faixaAnexo = faixaRepository.faixaIdealDeCalculo(dto.anexo()).orElseThrow(()-> new UsernameNotFoundException("Anexo não encontrado"));
 
         Empresa empresa = new Empresa("null", Anexo.ANEXO_1);
 
@@ -44,11 +47,15 @@ public class CalculoService {
             empresa.setAnexoPadrao(Anexo.fromValor(Math.toIntExact(dto.anexo())));
         }
 
-        BigDecimal aliquotaAfetiva = new BigDecimal(BigInteger.ONE);
+        BigDecimal produtoEntreFaturamentoAnualEAliquotaNominal = BigDecimalUtil.multiplicar(rbt12, faixaAnexo.getAliquotaNominal());
 
-        aliquotaAfetiva = (BigDecimalUtil
-                .subtracao(BigDecimalUtil
-                        .multiplicar(rbt12, faixaAnexo.getAliquotaNominal()), faixaAnexo.getDescontoDoValorRecolhido()));
+        BigDecimal subtracaoEntreOProdutoEParcelaADeduzir = BigDecimalUtil.subtracao(produtoEntreFaturamentoAnualEAliquotaNominal, faixaAnexo.getDescontoDoValorRecolhido());
+
+        if(subtracaoEntreOProdutoEParcelaADeduzir.compareTo(BigDecimal.ZERO) <= 0){
+            throw new IllegalArgumentException("Valor não pode ser 0 ou menor que 0");
+        }
+
+        BigDecimal aliquotaAfetiva = (BigDecimalUtil.dividir(subtracaoEntreOProdutoEParcelaADeduzir, rbt12));
 
         BigDecimal DAS = BigDecimalUtil.multiplicar(rpa, aliquotaAfetiva);
 
@@ -63,7 +70,7 @@ public class CalculoService {
                 DAS
         );
 
-        return DAS;
+        return BigDecimalUtil.toMonetario(DAS);
     }
 
 }
