@@ -1,4 +1,9 @@
 package com.devchaves.backend.dto;
 
-public record CalculoResponse() {
+import java.math.BigDecimal;
+
+public record CalculoResponse(
+        BigDecimal response,
+        String data
+) {
 }
