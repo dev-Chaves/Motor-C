@@ -3,6 +3,7 @@ package com.devchaves.backend;
 import com.devchaves.backend.dto.CalculoRequest;
 import com.devchaves.backend.entity.Anexo;
 import com.devchaves.backend.entity.FaixaAnexo;
+import com.devchaves.backend.exception.RegraDeCalculoNaoEncontradaException;
 import com.devchaves.backend.repository.EmpresaRepository;
 import com.devchaves.backend.repository.FaixaRepository;
 import com.devchaves.backend.service.CalculoService;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -86,10 +88,21 @@ public class CalculoServiceTest {
     }
 
     @Test
-    void subtracaoNaoPodeSerMenorQueZero(){
+    void anexoNaoEncontradoDeveRetornarRegraDeCalculoNaoEncontrada(){
+
+        CalculoRequest dto = new CalculoRequest("27252423000155"
+                , "50000.00"
+                , "350000.00"
+                , 3L);
+
+        RegraDeCalculoNaoEncontradaException exception = assertThrows(RegraDeCalculoNaoEncontradaException.class,
+                () -> {
+            calculoService.calculoDasModeloPreReforma(dto);
+                });
+
+        String mensagemEsperada = "Nenhuma Regra de Cálculo foi encontrada";
+
+        assertEquals(mensagemEsperada, exception.getMessage());
 
     }
-
-
-
 }

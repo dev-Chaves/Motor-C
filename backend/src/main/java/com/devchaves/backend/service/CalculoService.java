@@ -1,5 +1,6 @@
 package com.devchaves.backend.service;
 
+import com.devchaves.backend.exception.RegraDeCalculoNaoEncontradaException;
 import com.devchaves.backend.dto.CalculoRequest;
 import com.devchaves.backend.entity.Anexo;
 import com.devchaves.backend.entity.Calculo;
@@ -8,11 +9,9 @@ import com.devchaves.backend.entity.FaixaAnexo;
 import com.devchaves.backend.repository.EmpresaRepository;
 import com.devchaves.backend.repository.FaixaRepository;
 import com.devchaves.backend.util.BigDecimalUtil;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -38,7 +37,7 @@ public class CalculoService {
             throw new IllegalArgumentException("Faturamento não pode ser menor que 0 nem a Receita Bruta do mês");
         }
 
-        FaixaAnexo faixaAnexo = faixaRepository.faixaIdealDeCalculo(dto.anexo()).orElseThrow(()-> new UsernameNotFoundException("Anexo não encontrado"));
+        FaixaAnexo faixaAnexo = faixaRepository.faixaIdealDeCalculo(dto.anexo()).orElseThrow(()-> new RegraDeCalculoNaoEncontradaException("Nenhuma Regra de Cálculo foi encontrada"));
 
         Empresa empresa = new Empresa("null", Anexo.ANEXO_1);
 
