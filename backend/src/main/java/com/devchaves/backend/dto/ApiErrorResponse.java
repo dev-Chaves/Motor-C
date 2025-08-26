@@ -1,4 +1,8 @@
 package com.devchaves.backend.dto;
 
-public class ApiErrorResponse {
+public record ApiErrorResponse(
+        int status,
+        String message,
+        Long timeStamp
+) {
 }
