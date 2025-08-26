@@ -7,6 +7,7 @@ import com.devchaves.backend.entity.Anexo;
 import com.devchaves.backend.entity.Calculo;
 import com.devchaves.backend.entity.Empresa;
 import com.devchaves.backend.entity.FaixaAnexo;
+import com.devchaves.backend.repository.CalculoRepository;
 import com.devchaves.backend.repository.EmpresaRepository;
 import com.devchaves.backend.repository.FaixaRepository;
 import com.devchaves.backend.util.BigDecimalUtil;
@@ -24,9 +25,12 @@ public class CalculoService {
 
     private final EmpresaRepository empresaRepository;
 
-    public CalculoService(FaixaRepository faixaRepository, EmpresaRepository empresaRepository) {
+    private final CalculoRepository calculoRepository;
+
+    public CalculoService(FaixaRepository faixaRepository, EmpresaRepository empresaRepository, CalculoRepository calculoRepository) {
         this.faixaRepository = faixaRepository;
         this.empresaRepository = empresaRepository;
+        this.calculoRepository = calculoRepository;
     }
 
     public CalculoResponse calculoDasModeloPreReforma(CalculoRequest dto){
@@ -70,6 +74,8 @@ public class CalculoService {
                 aliquotaAfetiva,
                 DAS
         );
+
+        calculoRepository.save(calculoFeito);
 
         return new CalculoResponse(
                 DAS,
