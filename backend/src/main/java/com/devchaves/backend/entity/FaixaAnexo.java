@@ -42,6 +42,12 @@ public class FaixaAnexo {
     private LocalDate dataFimVigencia;
 
 
-    public FaixaAnexo(Anexo anexo, BigDecimal receitaBrutaMin, BigDecimal receitaBrutaMax, BigDecimal aliquotaNominal, BigDecimal descontoDoValorRecolhido, LocalDate dataVigencia) {
+    public FaixaAnexo(Anexo anexo, BigDecimal receitaBrutaMin, BigDecimal receitaBrutaMax, BigDecimal aliquotaNominal, BigDecimal descontoDoValorRecolhido, LocalDate dataInicioVigencia) {
+        this.anexo = anexo;
+        this.receitaBrutaMin = receitaBrutaMin;
+        this.receitaBrutaMax = receitaBrutaMax;
+        this.aliquotaNominal = aliquotaNominal;
+        this.descontoDoValorRecolhido = descontoDoValorRecolhido;
+        this.dataInicioVigencia = dataInicioVigencia;
     }
 }
