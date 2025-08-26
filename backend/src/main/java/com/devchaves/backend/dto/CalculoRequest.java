@@ -3,6 +3,7 @@ package com.devchaves.backend.dto;
 import com.devchaves.backend.entity.Anexo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
 
@@ -17,7 +18,7 @@ public record CalculoRequest(
         String rpa,
         @NotBlank(message = "RBT12 não pode ser vazio")
         String rbt12,
-        @NotBlank(message = "Anexo não pode ser vazio")
+        @NotNull(message = "Anexo não pode ser vazio")
         Long anexo
 
 //        @NotBlank
