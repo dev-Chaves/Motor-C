@@ -5,6 +5,7 @@ import com.devchaves.backend.dto.CalculoResponse;
 import com.devchaves.backend.entity.Anexo;
 import com.devchaves.backend.entity.FaixaAnexo;
 import com.devchaves.backend.exception.RegraDeCalculoNaoEncontradaException;
+import com.devchaves.backend.repository.CalculoRepository;
 import com.devchaves.backend.repository.EmpresaRepository;
 import com.devchaves.backend.repository.FaixaRepository;
 import com.devchaves.backend.service.CalculoService;
@@ -31,6 +32,9 @@ public class CalculoServiceTest {
     @Mock
     private EmpresaRepository empresaRepository;
 
+    @Mock
+    private CalculoRepository calculoRepository;
+
     @InjectMocks
     private CalculoService calculoService;
 
@@ -38,30 +42,24 @@ public class CalculoServiceTest {
     void deveCalcularODASCorretamenteParaCenarioValido(){
 
         CalculoRequest dto = new CalculoRequest("27252423000155"
-                , "50000.00"
-                , "350000.00"
-                , 3L);
+                , "20000.00"
+                , "480000.00"
+                , 1L);
 
         FaixaAnexo faixaAnexoMock = new FaixaAnexo(
-                Anexo.ANEXO_3,
-                new BigDecimal("180000.01"),
-                new BigDecimal("360000.00"),
-                new BigDecimal("0.1120"), // Alíquota Nominal de 11,2%
-                new BigDecimal("9360.00"),  // Parcela a Deduzir
+                Anexo.ANEXO_1,
+                new BigDecimal("360000.01"),
+                new BigDecimal("720000.00"),
+                new BigDecimal("0.0950"),
+                new BigDecimal("13860.00"),
                 LocalDate.of(2025, 1, 1)
         );
 
         when(faixaRepository.faixaIdealDeCalculo(dto.anexo())).thenReturn(Optional.of(faixaAnexoMock));
 
-        when(empresaRepository.findByCNPJ(dto.cnpj())).thenReturn(Optional.empty());
-
         CalculoResponse DAS = calculoService.calculoDasModeloPreReforma(dto);
 
-        // Assert (Verificar)
-        // Cálculo manual para o valor esperado:
-        // Alíquota Efetiva = ((350000 * 0.1120) - 9360) / 350000 = (39200 - 9360) / 350000 = 29840 / 350000 = 0.085257...
-        // DAS = 50000 * 0.085257... = 4262.85
-        BigDecimal valorEsperado = new BigDecimal("4262.86");
+        BigDecimal valorEsperado = new BigDecimal("1322.50");
 
         System.out.println(DAS);
 
